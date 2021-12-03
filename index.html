@@ -2,6 +2,9 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <title>EPL Stadiums</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css' rel='stylesheet' />
 
@@ -11,7 +14,7 @@
         }
 
         body {
-          color: #404040;
+          color: #313030;
           font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
           margin: 0;
           padding: 0;
@@ -37,7 +40,7 @@
 
         .sidebar {
           position: absolute;
-          width: 33.3333%;
+          width: 25%;
           height: 100%;
           top: 0;
           left: 0;
@@ -47,14 +50,14 @@
 
         .map {
           position: absolute;
-          left: 33.3333%;
-          width: 66.6666%;
+          left: 25%;
+          width: 75%;
           top: 0;
           bottom: 0;
         }
 
         .heading {
-          background: #fff;
+          background: rgb(255, 255, 255);
           border-bottom: 1px solid #eee;
           height: 60px;
           line-height: 60px;
@@ -77,14 +80,22 @@
 
         .listings .item .title {
           display: block;
-          color: #00853e;
+          color: #d68185;
           font-weight: 700;
         }
 
         .listings .item .title small { font-weight: 400; }
 
-        .listings .item.active .title,
-        .listings .item .title:hover { color: #8cc63f; }
+        .listings .item .subtitle {
+          display: block;
+          color: #4585c2;
+          font-weight: 700;
+        }
+
+        .listings .item .subtitle small { font-weight: 400; }
+
+        .listings .item.active .subtitle,
+        .listings .item .subtitle:hover { color: #0a0a09; }
 
         .listings .item.active {
           background-color: #f8f8f8;
@@ -102,8 +113,58 @@
         }
 
         ::-webkit-scrollbar-thumb {
-          background: #00853e;
+          background: #d68185;
           border-radius: 0;
+        }
+
+        .marker {
+          border: none;
+          cursor: pointer;
+          height: 56px;
+          width: 56px;
+          background-image: url(arsenal.png);
+        }
+
+        .mapboxgl-popup-close-button {
+          display: none;
+        }
+
+        .mapboxgl-popup-content {
+          font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+          padding: 0;
+          width: 180px;
+        }
+
+        .mapboxgl-popup-content h3 {
+          background: #d68185;
+          color: #fff;
+          margin: 0;
+          padding: 10px;
+          border-radius: 3px 3px 0 0;
+          font-weight: 700;
+          margin-top: -15px;
+        }
+
+        .mapboxgl-popup-content h4 {
+          margin: 0;
+          padding: 10px;
+          font-weight: 400;
+        }
+
+        .mapboxgl-popup-content div {
+          padding: 10px;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+          margin-top: 15px;
+        }
+
+        .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+          border-bottom-color: #d68185;
+        }
+
+        .mapboxgl-popup {
+          padding-bottom: 50px;
         }
       </style>
 </head>
@@ -111,7 +172,7 @@
 <body>
     <div class='sidebar'>
         <div class='heading'>
-          <h1>Premier League Stadiums</h1>
+          <h1>Premier League Away Days</h1>
         </div>
         <div id='listings' class='listings'></div>
     </div>
@@ -126,53 +187,126 @@
           center: [-1.1416, 52.6205],
           zoom: 5.5,
           scrollZoom: true
-      });
-
-      const eplstadiums = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"Name":"Emirates Stadium","Address":"Hornsey Rd, London N7 7AJ, United Kingdom","City":"London","Team":"Arsenal FC","Capacity":"60,260","Opened":2006},"geometry":{"type":"Point","coordinates":[-0.108426,51.555091]}},{"type":"Feature","properties":{"Name":"Villa Park","Address":"Trinity Rd, Birmingham B6 6HE, United Kingdom","City":"Birmingham","Team":"Aston Villa FC","Capacity":"42,095","Opened":1897},"geometry":{"type":"Point","coordinates":[-1.884904,52.509133]}},{"type":"Feature","properties":{"Name":"Brentford Community Stadium","Address":"166 Lionel Rd N, Brentford TW8 9QT, United Kingdom","City":"London","Team":"Brentford FC","Capacity":"17,250","Opened":2020},"geometry":{"type":"Point","coordinates":[-0.288746,51.490682]}},{"type":"Feature","properties":{"Name":"American Express Community Stadium","Address":"Village Way, Brighton BN1 9BL, United Kingdom","City":"Brighton","Team":"Brighton & Hove Albion FC","Capacity":"32,000","Year-Opened":2011},"geometry":{"type":"Point","coordinates":[-0.083147674,50.86169375]}},{"type":"Feature","properties":{"Name":"Turf Moor","Address":"Turf Moor, Harry Potts Way, Burnley BB10 4BX, United Kingdom","City":"Burnley","Team":"Burnley FC","Capacity":"21,944","Opened":1883},"geometry":{"type":"Point","coordinates":[-2.230154683,53.7891022]}},{"type":"Feature","properties":{"Name":"Stamford Bridge","Address":"Fulham Rd., London SW6 1HS, United Kingdom","City":"London","Team":"Chelsea FC","Capacity":"41,837","Opened":1877},"geometry":{"type":"Point","coordinates":[-0.190613179,51.48181665]}},{"type":"Feature","properties":{"Name":"Selhurst Park","Address":"Whitehorse Ln, London SE25 6PU, United Kingdom","City":"London","Team":"Crystal Palace FC","Capacity":"25,486","Opened":1924},"geometry":{"type":"Point","coordinates":[-0.084888159,51.39833574]}},{"type":"Feature","properties":{"Name":"Goodison Park","Address":"Goodison Rd, Liverpool L4 4EL, United Kingdom","City":"Liverpool","Team":"Everton FC","Capacity":"39,414","Opened":1892},"geometry":{"type":"Point","coordinates":[-2.966051081,53.43892758]}},{"type":"Feature","properties":{"Name":"Elland Road","Address":"Elland Rd, Beeston, Leeds LS11 0ES, United Kingdom","City":"Leeds","Team":"Leeds United FC","Capacity":"37,792","Opened":1897},"geometry":{"type":"Point","coordinates":[-1.571661804,53.77787958]}},{"type":"Feature","properties":{"Name":"King Power Stadium","Address":"Filbert Wy, Leicester LE2 7FL, United Kingdom","City":"Leicester","Team":"Leicester City FC","Capacity":"32,261","Opened":2002},"geometry":{"type":"Point","coordinates":[-1.141695975,52.62056158]}},{"type":"Feature","properties":{"Name":"Anfield","Address":"Anfield Rd, Anfield, Liverpool L4 0TH, United Kingdom","City":"Liverpool","Team":"Liverpool FC","Capacity":"53,394","Opened":1884},"geometry":{"type":"Point","coordinates":[-2.96047595,53.43097001]}},{"type":"Feature","properties":{"Name":"Etihad Stadium","Address":"Ashton New Rd, Manchester M11 3FF, United Kingdom","City":"Manchester","Team":"Manchester City FC","Capacity":"53,400","Opened":2003},"geometry":{"type":"Point","coordinates":[-2.200008488,53.48320511]}},{"type":"Feature","properties":{"Name":"Old Trafford","Address":"Sir Matt Busby Way, Old Trafford, Stretford, Manchester M16 0RA, United Kingdom","City":"Manchester","Team":"Manchester United FC","Capacity":"74,140","Opened":1909},"geometry":{"type":"Point","coordinates":[-2.291007508,53.46314192]}},{"type":"Feature","properties":{"Name":"St. James' Park","Address":"Barrack Rd, Newcastle upon Tyne NE1 4ST, United Kingdom","City":"Newcastle-upon-Tyne","Team":"Newcastle United FC","Capacity":"52,305","Opened":1892},"geometry":{"type":"Point","coordinates":[-1.621480847,54.97561739]}},{"type":"Feature","properties":{"Name":"Carrow Road","Address":"Carrow Rd, Norwich NR1 3JE, United Kingdom","City":"Norwich","Team":"Norwich City FC","Capacity":"27,359","Opened":1935},"geometry":{"type":"Point","coordinates":[1.309742838,52.62228011]}},{"type":"Feature","properties":{"Name":"St. Mary's Stadium","Address":"Britannia Rd, Southampton SO14 5FP, United Kingdom","City":"Southampton","Team":"Southampton FC","Capacity":"32,384","Opened":2001},"geometry":{"type":"Point","coordinates":[-1.390490162,50.90594096]}},{"type":"Feature","properties":{"Name":"Tottenham Hotspur Stadium","Address":"782 High Rd, London N17 0BX, United Kingdom","City":"London","Team":"Tottenham Hotspur FC","Capacity":"62,850","Opened":2019},"geometry":{"type":"Point","coordinates":[-0.065770133,51.60440469]}},{"type":"Feature","properties":{"Name":"Vicarage Road","Address":"Vicarage Rd, Watford WD18 0ER, United Kingdom","City":"Watford","Team":"Watford FC","Capacity":"22,200","Opened":1922},"geometry":{"type":"Point","coordinates":[-0.401072348,51.65000105]}},{"type":"Feature","properties":{"Name":"London Stadum","Address":"London E20 2ST, United Kingdom","City":"London","Team":"West Ham United FC","Capacity":"66,000","Opened":2012},"geometry":{"type":"Point","coordinates":[-0.016281837,51.53886296]}},{"type":"Feature","properties":{"Name":"Molineux Stadium","Address":"Waterloo Rd, Wolverhampton WV1 4QR, United Kingdom","City":"Wolverhampton","Team":"Wolverhampton Wanderers FC","Capacity":"32,050","Opened":1889},"geometry":{"type":"Point","coordinates":[-2.130031839,52.59033041]}}]
-      };
-
-      eplstadiums.features.forEach(function (eplstadiums, i) {
-        eplstadiums.properties.id = i;
-      });
-
-      map.on('load', () => {
-
-        map.addLayer({
-          id: 'locations',
-          type: 'circle',
-
-          source: {
-            type: 'geojson',
-            data: eplstadiums
-          }
         });
-        buildLocationList(eplstadiums);
-      });
-    </script>
-    <script>
-      function buildLocationList(eplstadiums) {
-          for (const eplstadiums of eplstadiums.features) {
-           
-            const listings = document.getElementById('listings');
-            const listing = listings.appendChild(document.createElement('div'));
-            
-            listing.id = `listing-${eplstadiums.properties.id}`;
-            
-            listing.className = 'item';
 
-            const details = listing.appendChild(document.createElement('div'));
-            details.innerHTML = `${eplstadiums.properties.Name}`;
-            details.innerHTML = `${eplstadiums.properties.Team}`;
-            details.innerHTML = `${eplstadiums.properties.Address}`;
-            details.innerHTML = `${eplstadiums.properties.City}`;
-            details.innerHTML = `${eplstadiums.properties.Capacity}`;
-            details.innerHTML = `${eplstadiums.properties.Opened}`;
+        async function geojsonFetch() {
+            let response = await fetch('eplstadiumsdata.geojson');
+            let eplstadiums = await response.json();
 
-            if (eplstadiums.properties.distance) {
-              const roundedDistance = Math.round(eplstadiums.properties.distance * 100) / 100;
-              details.innerHTML += `<div><strong>${roundedDistance} miles away</strong></div>`;
-            }
+        eplstadiums.features.forEach(function (eplstadium, i) {
+          eplstadium.properties.id = i;
+        });
+
+        map.on('load', function loadingData() {
+                map.addSource('eplstadiums', {
+                    type: 'geojson',
+                    data: eplstadiums
+                });
+
+          addMarkers();
+          
+          buildLocationList(eplstadiums);
+        });
+        
+        function addMarkers() {
+          /* For each feature in the GeoJSON object above: */
+          for (const marker of eplstadiums.features) {
+            /* Create a div element for the marker. */
+            const el = document.createElement('div');
+            /* Assign a unique `id` to the marker. */
+            el.id = `marker-${marker.properties.id}`;
+            /* Assign the `marker` class to each marker for styling. */
+            el.className = 'marker';
+
+            /**
+            * Create a marker using the div element
+            * defined above and add it to the map.
+            **/
+            new mapboxgl.Marker(el, { offset: [0, -23] })
+              .setLngLat(marker.geometry.coordinates)
+              .addTo(map);
           }
+        }
+        }
+        geojsonFetch();
+
+    </script>
+
+    <script>
+     function buildLocationList(eplstadiums) {
+        for (const eplstadium of eplstadiums.features) {
+          /* Add a new listing section to the sidebar. */
+          const listings = document.getElementById('listings');
+          const listing = listings.appendChild(document.createElement('div'));
+          /* Assign a unique `id` to the listing. */
+          listing.id = `listing-${eplstadium.properties.id}`;
+          /* Assign the `item` class to each listing for styling. */
+          listing.className = 'item';
+
+          const link = listing.appendChild(document.createElement('a'));
+          link.href = '#';
+          link.className = 'title';
+          link.id = `link-${eplstadium.properties.id}`;
+          link.innerHTML = `${eplstadium.properties.Name}`;
+
+          const sublink = listing.appendChild(document.createElement('a'));
+          sublink.href = '#';
+          sublink.className = 'subtitle';
+          sublink.id = `link-${eplstadium.properties.id}`;
+          sublink.innerHTML = `${eplstadium.properties.Team}`;
+          
+          const details1 = listing.appendChild(document.createElement('div'));
+          details1.innerHTML = `${eplstadium.properties.City}`
+
+          const details2 = listing.appendChild(document.createElement('div'));
+          details2.innerHTML = `${eplstadium.properties.Capacity}`
+
+          const details3 = listing.appendChild(document.createElement('div'));
+          details3.innerHTML = `${eplstadium.properties.Opened}`
+         
+          if (eplstadium.properties.distance) {
+            const roundedDistance = Math.round(eplstadium.properties.distance * 100) / 100;
+            details.innerHTML += `<div><strong>${roundedDistance} miles away</strong></div>`;
+          }
+        }
+      }
+      </script>
+
+      <script>
+        function flyToStadium(currentFeature) {
+          map.flyTo({
+            center: currentFeature.geometry.coordinates,
+            zoom: 15
+          });
+        }
+
+        function createPopUp(currentFeature) {
+          const popUps = document.getElementsByClassName('mapboxgl-popup');
+
+          if (popUps[0]) popUps[0].remove();
+
+          const popup = new mapboxgl.Popup({ closeOnClick: false })
+            .setLngLat(currentFeature.geometry.coordinates)
+            .setHTML(`<h3>Stadium</h3><h4>${currentFeature.properties.address}</h4>`)
+            .addTo(map);
+        }
+
+        function flyToStadium(currentFeature) {
+          map.flyTo({
+            center: currentFeature.geometry.coordinates,
+            zoom: 15
+          });
+        }
+
+        function createPopUp(currentFeature) {
+          const popUps = document.getElementsByClassName('mapboxgl-popup');
+          /** Check if there is already a popup on the map and if so, remove it */
+          if (popUps[0]) popUps[0].remove();
+
+          const popup = new mapboxgl.Popup({ closeOnClick: false })
+            .setLngLat(currentFeature.geometry.coordinates)
+            .setHTML(`<h3>Stadium</h3><h4>${currentFeature.properties.address}</h4>`)
+            .addTo(map);
         }
       </script>
 </body>
