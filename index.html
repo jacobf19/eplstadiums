@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>EPL Stadiums</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css' rel='stylesheet' />
-
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <style>
         * {
           box-sizing: border-box;
@@ -59,9 +60,11 @@
         .heading {
           background: rgb(255, 255, 255);
           border-bottom: 1px solid #eee;
-          height: 60px;
+          min-height: 60px;
           line-height: 60px;
           padding: 0 10px;
+          background-color: #d68185;
+          color: #fff;
         }
 
         .listings {
@@ -76,11 +79,12 @@
           text-decoration: none;
         }
 
-        .listings .item:last-child { border-bottom: none; }
-
+        .listings .item:last-child { 
+          border-bottom: none; 
+          }
         .listings .item .title {
           display: block;
-          color: #d68185;
+          color: #4585c2;
           font-weight: 700;
         }
 
@@ -88,19 +92,20 @@
 
         .listings .item .subtitle {
           display: block;
-          color: #4585c2;
+          color: #d68185;
           font-weight: 700;
         }
 
-        .listings .item .subtitle small { font-weight: 400; }
-
+        .listings .item .subtitle small { 
+          font-weight: 400; 
+          }
         .listings .item.active .subtitle,
-        .listings .item .subtitle:hover { color: #0a0a09; }
-
+        .listings .item .subtitle:hover { 
+          color: #0a0a09; 
+          }
         .listings .item.active {
           background-color: #f8f8f8;
         }
-
         ::-webkit-scrollbar {
           width: 3px;
           height: 3px;
@@ -122,7 +127,10 @@
           cursor: pointer;
           height: 56px;
           width: 56px;
-          background-image: url(arsenal.png);
+          background-image: url(stadium4.png);
+        }
+        .mapboxgl-popup {
+          padding-bottom: 50px;
         }
 
         .mapboxgl-popup-close-button {
@@ -136,13 +144,12 @@
         }
 
         .mapboxgl-popup-content h3 {
-          background: #d68185;
+          background: #4585c2;
           color: #fff;
-          margin: 0;
+          margin: -15px 0 0;
           padding: 10px;
           border-radius: 3px 3px 0 0;
           font-weight: 700;
-          margin-top: -15px;
         }
 
         .mapboxgl-popup-content h4 {
@@ -163,21 +170,29 @@
           border-bottom-color: #d68185;
         }
 
-        .mapboxgl-popup {
-          padding-bottom: 50px;
+        .mapboxgl-ctrl-geocoder {
+          border: 0;
+          border-radius: 0;
+          position: relative;
+          top: 0;
+          width: 800px;
+          margin-top: 0;
+        }
+
+        .mapboxgl-ctrl-geocoder > div {
+          min-width: 100%;
+          margin-left: 0;
         }
       </style>
 </head>
-
 <body>
     <div class='sidebar'>
         <div class='heading'>
-          <h1>Premier League Away Days</h1>
+          <h1>Premier League Stadiums</h1>
         </div>
         <div id='listings' class='listings'></div>
     </div>
     <div id="map" class="map"></div>
-
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiamFjb2JmMTkiLCJhIjoiY2t3aXA4empyMWFpdDMzbm84OWRqcmZsMCJ9.8eSwD7Q2yQXgRUbIOByDoQ';
 
@@ -194,7 +209,7 @@
             let eplstadiums = await response.json();
 
         eplstadiums.features.forEach(function (eplstadium, i) {
-          eplstadium.properties.id = i;
+        eplstadium.properties.id = i;
         });
 
         map.on('load', function loadingData() {
@@ -202,113 +217,182 @@
                     type: 'geojson',
                     data: eplstadiums
                 });
+                const geocoder = new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken, // Set the access token
+                mapboxgl: mapboxgl, // Set the mapbox-gl instance
+                marker: true, // Use the geocoder's default marker style
+                bbox: [-5.71287, 49.95987, 1.74176, 55.81129] // Set the bounding box coordinates
+              });
 
-          addMarkers();
+        buildLocationList(eplstadiums);
+        map.addControl(geocoder, 'top-left');
+        addMarkers();
           
-          buildLocationList(eplstadiums);
-        });
-        
-        function addMarkers() {
-          /* For each feature in the GeoJSON object above: */
-          for (const marker of eplstadiums.features) {
-            /* Create a div element for the marker. */
-            const el = document.createElement('div');
-            /* Assign a unique `id` to the marker. */
-            el.id = `marker-${marker.properties.id}`;
-            /* Assign the `marker` class to each marker for styling. */
-            el.className = 'marker';
+          geocoder.on('result', (event) => {
+          const searchResult = event.result.geometry;
+          const options = { units: 'kilometers' };
+            for (const eplstadium of eplstadiums.features) {
+              eplstadium.properties.distance = turf.distance(
+              searchResult,
+              eplstadium.geometry,
+              options
+              );
+              }
+              eplstadiums.features.sort((a, b) => {
+                if (a.properties.distance > b.properties.distance) {
+                  return 1;
+                }
+                if (a.properties.distance < b.properties.distance) {
+                  return -1;
+                }
+                return 0; // a must be equal to b
+              });
+              const listings = document.getElementById('listings');
+              while (listings.firstChild) {
+              listings.removeChild(listings.firstChild);
+              }
+              buildLocationList(eplstadiums);
 
-            /**
-            * Create a marker using the div element
-            * defined above and add it to the map.
-            **/
-            new mapboxgl.Marker(el, { offset: [0, -23] })
-              .setLngLat(marker.geometry.coordinates)
+              createPopUp(eplstadiums.features[0]);
+
+              const activeListing = document.getElementById(
+                `listing-${eplstadiums.features[0].properties.id}`
+              );
+              activeListing.classList.add('active');
+
+              const bbox = getBbox(stores, 0, searchResult);
+                map.fitBounds(bbox, {
+                padding: 100
+              });
+              });
+              });
+
+              function getBbox(sortedStores, storeIdentifier, searchResult) {
+                const lats = [
+                  sortedStores.features[storeIdentifier].geometry.coordinates[1],
+                  searchResult.coordinates[1]
+                ];
+                const lons = [
+                  sortedStores.features[storeIdentifier].geometry.coordinates[0],
+                  searchResult.coordinates[0]
+                ];
+                const sortedLons = lons.sort((a, b) => {
+                  if (a > b) {
+                    return 1;
+                  }
+                  if (a.distance < b.distance) {
+                    return -1;
+                  }
+                  return 0;
+                });
+                const sortedLats = lats.sort((a, b) => {
+                  if (a > b) {
+                    return 1;
+                  }
+                  if (a.distance < b.distance) {
+                    return -1;
+                  }
+                  return 0;
+                });
+                return [
+                  [sortedLons[0], sortedLats[0]],
+                  [sortedLons[1], sortedLats[1]]
+                ];
+              }
+
+              function addMarkers() {
+              /* For each feature in the GeoJSON object above: */
+              for (const marker of eplstadiums.features) {
+                /* Create a div element for the marker. */
+                const el = document.createElement('div');
+                /* Assign a unique `id` to the marker. */
+                el.id = `marker-${marker.properties.id}`;
+                el.style =
+                /* Assign the `marker` class to each marker for styling. */
+                el.className = 'marker';
+                
+                new mapboxgl.Marker(el, { offset: [0, -23] })
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+
+                el.addEventListener('click', (e) => {
+                  flyToStadium(marker);
+                  createPopUp(marker);
+                  const activeItem = document.getElementsByClassName('active');
+                  e.stopPropagation();
+                  if (activeItem[0]) {
+                    activeItem[0].classList.remove('active');
+                  }
+                  const listing = document.getElementById(`listing-${marker.properties.id}`);
+                  listing.classList.add('active');
+                });
+                }
+              }
+              
+              function buildLocationList(eplstadiums) {
+              for (const eplstadium of eplstadiums.features) {
+              const listings = document.getElementById('listings');
+              const listing = listings.appendChild(document.createElement('div'));
+              listing.id = `listing-${eplstadium.properties.id}`;
+              listing.className = 'item';
+
+              const link = listing.appendChild(document.createElement('a'));
+              link.href = '#';
+              link.className = 'title';
+              link.id = `link-${eplstadium.properties.id}`;
+              link.innerHTML = `${eplstadium.properties.Team}`;
+
+              const sublink = listing.appendChild(document.createElement('a'));
+              sublink.href = '#';
+              sublink.className = 'subtitle';
+              sublink.id = `link-${eplstadium.properties.id}`;
+              sublink.innerHTML = `${eplstadium.properties.Name}`;
+              
+              const details1 = listing.appendChild(document.createElement('div'));
+              details1.innerHTML = `${eplstadium.properties.City}`
+
+              const details2 = listing.appendChild(document.createElement('div'));
+              details2.innerHTML = `${eplstadium.properties.Capacity}`
+
+              const details3 = listing.appendChild(document.createElement('div'));
+              details3.innerHTML = `${eplstadium.properties.Opened}`
+            
+              if (eplstadium.properties.distance) {
+              const roundedDistance = Math.round(eplstadium.properties.distance * 100) / 100;
+              details.innerHTML += `<div><strong>${roundedDistance} miles away</strong></div>`;
+              }
+              }
+              }
+              link.addEventListener('click', function () {
+              for (const feature of eplstadiums.features) {
+              if (this.id === `link-${feature.properties.id}`) {
+                flyToStadium(feature);
+                createPopUp(feature);
+              }
+              }
+              const activeItem = document.getElementsByClassName('active');
+              if (activeItem[0]) {
+              activeItem[0].classList.remove('active');
+              }
+              this.parentNode.classList.add('active');
+              });
+              }     
+              function flyToStadium(currentFeature) {
+              map.flyTo({
+              center: currentFeature.geometry.coordinates,
+              zoom: 15
+              });
+              }
+              function createPopUp(currentFeature) {
+              const popUps = document.getElementsByClassName('mapboxgl-popup');
+              if (popUps[0]) popUps[0].remove();
+
+              const popup = new mapboxgl.Popup({ closeOnClick: false })
+              .setLngLat(currentFeature.geometry.coordinates)
+              .setHTML(`<h3>${currentFeature.properties.Team}</h3><h4>${currentFeature.properties.Name}</h4>`)
               .addTo(map);
-          }
-        }
-        }
+              }
         geojsonFetch();
-
-    </script>
-
-    <script>
-     function buildLocationList(eplstadiums) {
-        for (const eplstadium of eplstadiums.features) {
-          /* Add a new listing section to the sidebar. */
-          const listings = document.getElementById('listings');
-          const listing = listings.appendChild(document.createElement('div'));
-          /* Assign a unique `id` to the listing. */
-          listing.id = `listing-${eplstadium.properties.id}`;
-          /* Assign the `item` class to each listing for styling. */
-          listing.className = 'item';
-
-          const link = listing.appendChild(document.createElement('a'));
-          link.href = '#';
-          link.className = 'title';
-          link.id = `link-${eplstadium.properties.id}`;
-          link.innerHTML = `${eplstadium.properties.Name}`;
-
-          const sublink = listing.appendChild(document.createElement('a'));
-          sublink.href = '#';
-          sublink.className = 'subtitle';
-          sublink.id = `link-${eplstadium.properties.id}`;
-          sublink.innerHTML = `${eplstadium.properties.Team}`;
-          
-          const details1 = listing.appendChild(document.createElement('div'));
-          details1.innerHTML = `${eplstadium.properties.City}`
-
-          const details2 = listing.appendChild(document.createElement('div'));
-          details2.innerHTML = `${eplstadium.properties.Capacity}`
-
-          const details3 = listing.appendChild(document.createElement('div'));
-          details3.innerHTML = `${eplstadium.properties.Opened}`
-         
-          if (eplstadium.properties.distance) {
-            const roundedDistance = Math.round(eplstadium.properties.distance * 100) / 100;
-            details.innerHTML += `<div><strong>${roundedDistance} miles away</strong></div>`;
-          }
-        }
-      }
-      </script>
-
-      <script>
-        function flyToStadium(currentFeature) {
-          map.flyTo({
-            center: currentFeature.geometry.coordinates,
-            zoom: 15
-          });
-        }
-
-        function createPopUp(currentFeature) {
-          const popUps = document.getElementsByClassName('mapboxgl-popup');
-
-          if (popUps[0]) popUps[0].remove();
-
-          const popup = new mapboxgl.Popup({ closeOnClick: false })
-            .setLngLat(currentFeature.geometry.coordinates)
-            .setHTML(`<h3>Stadium</h3><h4>${currentFeature.properties.address}</h4>`)
-            .addTo(map);
-        }
-
-        function flyToStadium(currentFeature) {
-          map.flyTo({
-            center: currentFeature.geometry.coordinates,
-            zoom: 15
-          });
-        }
-
-        function createPopUp(currentFeature) {
-          const popUps = document.getElementsByClassName('mapboxgl-popup');
-          /** Check if there is already a popup on the map and if so, remove it */
-          if (popUps[0]) popUps[0].remove();
-
-          const popup = new mapboxgl.Popup({ closeOnClick: false })
-            .setLngLat(currentFeature.geometry.coordinates)
-            .setHTML(`<h3>Stadium</h3><h4>${currentFeature.properties.address}</h4>`)
-            .addTo(map);
-        }
       </script>
 </body>
-
 </html>
