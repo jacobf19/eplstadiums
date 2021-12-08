@@ -1,2 +1,12 @@
 # Premier League Stadiums
-Repository for GEOG 495 final project for English Premier League stadium locator map
+This repository hosts the data for a GEOG 495 final project for a map of English Premier League stadiums.
+
+## Webpage Features
+
+## Map Features
+
+## Uses
+
+## Data Sources
+
+## Acknowledgements
