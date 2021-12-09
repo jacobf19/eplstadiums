@@ -323,8 +323,8 @@
             link.addEventListener('click', function () {
             for (const feature of eplstadiums.features) {
             if (this.id === `link-${feature.properties.id}`) {
-              flyToStadium(feature);
-              createPopUp(feature);
+            flyToStadium(feature);
+            createPopUp(feature);
             }
             }
             const activeItem = document.getElementsByClassName('active');
@@ -345,7 +345,7 @@
             if (popUps[0]) popUps[0].remove();
             const popup = new mapboxgl.Popup({ closeOnClick: true })
             .setLngLat(currentFeature.geometry.coordinates)
-            .setHTML(`<h3>${currentFeature.properties.Name}</h3><h4>${currentFeature.properties.Team}</h4>`)
+            .setHTML(`<h3>${currentFeature.properties.Name}</h3><h3>${currentFeature.properties.Team}</h3><h4>${currentFeature.properties.Address}</h4>`)
             .addTo(map);
             }
         geojsonFetch();
