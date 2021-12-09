@@ -44,10 +44,11 @@ At the most basic level, a Premier League fan or anyone with an interest in lear
 ![London](https://github.com/jacobf19/eplstadiums/blob/main/london.png)
 
 ## Data Sources
-Data was compiled by searching in
-Stadium data: [Google Maps](https://www.google.com/maps)
+Location data for the stadiums was compiled by searching for coordinates in [Google Maps](https://www.google.com/maps)
 
 Mapbox Data: [Custom Mapbox Style](https://studio.mapbox.com/styles/jacobf19/ckwigbmr25a4c14rx05emxggb/edit/#11.71/51.5063/-0.0888)
+
+Icon: [Premier League Logo](https://www.premierleague.com/)
 
 ## Acknowledgements
 This project is based off of a tutorial by Mapbox to [Build a Store Locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
