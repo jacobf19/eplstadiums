@@ -41,7 +41,7 @@ First, the map can be used to understand the distance from one stadium to anothe
 
 At the most basic level, a Premier League fan or anyone with an interest in learning UK geography may enjoy seeing the locations of Premier League stadiums across the entire country, or even within a specific city like London with six Premier League stadiums. 
 
-!(https://github.com/jacobf19/eplstadiums/blob/main/london.png)
+[!](https://github.com/jacobf19/eplstadiums/blob/main/london.png)
 
 ## Data Sources
 Data was compiled by searching in
