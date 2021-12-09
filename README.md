@@ -46,9 +46,12 @@ At the most basic level, a Premier League fan or anyone with an interest in lear
 ## Data Sources
 Location data for the stadiums was compiled by searching for coordinates in [Google Maps](https://www.google.com/maps)
 
+Stadium and team specific pages can be found on the [Premier League website](https://www.premierleague.com/)
+
 Mapbox Data: [Custom Mapbox Style](https://studio.mapbox.com/styles/jacobf19/ckwigbmr25a4c14rx05emxggb/edit/#11.71/51.5063/-0.0888)
 
 Icon: [Premier League Logo](https://www.premierleague.com/)
 
 ## Acknowledgements
 This project is based off of a tutorial by Mapbox to [Build a Store Locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
+
