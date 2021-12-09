@@ -4,7 +4,7 @@ This repository hosts the data for the GEOG 495 final project, which is a map of
 ## Webpage Features
 The main function of this webpage is to display the locations of the English Premier League stadiums, across the country of England, within the United Kingdom. 
 
-On the left side of the page, the title describes what is shown on the map, this seasons Premier League stadiums. Underneath, information about each Premier League team is listed by team in alphabetical order. The team name in blue is followed by the stadium name in red, which then shows the city, the stadium capacity, and the year the stadium opened. The user can scroll on this list to see all 20 stadiums. 
+On the left side of the page, the title describes what is shown on the map, this season's Premier League stadiums. Underneath, information about each Premier League team is listed by team in alphabetical order. The team name in blue is followed by the stadium name in red, which then shows the city, the stadium capacity, and the year the stadium opened. The user can scroll on this list to see all 20 stadiums. 
 
 The main part of the webpage is a map of the 20 Premier League stadiums in England. This map can be zoomed in and out by scrolling, as well as navigation by dragging, to view locations in England and around the world. 
 
@@ -13,10 +13,12 @@ There is a search bar on the top left of the map, which allows the user to searc
 ## Map Features
 The default web map is set to display the entire country of England with all 20 stadiums in view. The stadium locations are represented by the Premier League logo, which is a circular purple lion with a crown. These stadiums are set against a custom basemap.
 
-### Basemap
-This basemap was created using Mapbox Studio Style Editor, which allows the user to create a custom basemap. The default monochrome basemap was edited in this style editor in order to display the stadiums in a way which clearly showed the locations of the stadium without other distractions. 
+This map was made using ***Mapbox GL JS*** and is hosted on ***GitHub***.
 
-At default extent, major highways are displayed in light yellow. After zooming into a specific city, railroads and transit lines are displayed in dark grey. Further zooming into a specific city reveals metro train system stations, stark black and grey icons which are set against the white basemap and yellow highways. The major UK highway system and the railway lines across the country are specifically chosen for the purpose of supporter travel between grounds. The EPL, and English football in general, has a strong culture of supporters traveling to other teams stadiums for "Away Days" to support their team in other cities. Many fans drive, but some also take rail, therefore the inclusion of both has been made to show how stadiums are connected to commuter networks and how a fan might travel between stadiums. 
+### Basemap
+This basemap was created using [Mapbox Studio Style Editor](https://studio.mapbox.com/styles/jacobf19/ckwigbmr25a4c14rx05emxggb/edit/#11.71/51.5063/-0.0888), which allows the user to create a custom basemap. The default monochrome basemap was edited in this style editor in order to display the stadiums in a way which clearly showed the locations of the stadium without other distractions. 
+
+At default extent, major highways are displayed in light yellow. After zooming into a specific city, railroads and transit lines are displayed in dark grey. Further zooming into a specific city reveals metro train system stations, stark black and grey icons which are set against the white basemap and yellow highways. The major UK highway system and the railway lines across the country are specifically chosen for the purpose of supporter travel between grounds. The EPL, and English football in general, has a strong culture of supporters traveling to other team's stadiums for "Away Days" to support their team in other cities. Many fans drive, but some also take rail, therefore the inclusion of both has been made to show how stadiums are connected to commuter networks and how a fan might travel between stadiums. 
 
 Upon further zoom, the footprints of buildings are set in grey on top of the white basemap. Labels for major cities are shown at the default extent, with more minor cities, neighborhoods, and even building titles at smaller extents. 
 
@@ -31,6 +33,10 @@ First, the map can be used to understand the distance from one stadium to anothe
 At the most basic level, a Premier League fan or anyone with an interest in learning UK geography may enjoy seeing the locations of Premier League stadiums across the entire country, or even within a specific city like London with six Premier League stadiums. 
 
 ## Data Sources
-Stadium data: !(Google Maps)[https://www.google.com/maps]
-Mapbox 
+Data was compiled by searching in
+Stadium data: [Google Maps](https://www.google.com/maps)
+
+Mapbox Data: [Custom Mapbox Style](https://studio.mapbox.com/styles/jacobf19/ckwigbmr25a4c14rx05emxggb/edit/#11.71/51.5063/-0.0888)
+
 ## Acknowledgements
+This project is based off of a tutorial by Mapbox to [Build a Store Locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
