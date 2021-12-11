@@ -52,6 +52,9 @@ Mapbox Data: [Custom Mapbox Style](https://studio.mapbox.com/styles/jacobf19/ckw
 
 Icon: [Premier League Logo](https://www.premierleague.com/)
 
+Logos: [Arsenal](https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FArsenal_F.C.&psig=AOvVaw1keO_6Oqn72VZL48_i9Sxo&ust=1639175827929000&source=images&cd=vfe&ved=0CAwQjhxqFwoTCOjS8Prj1_QCFQAAAAAdAAAAABAF)
+
+
 ## Acknowledgements
 This project is based off of a tutorial by Mapbox to [Build a Store Locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
 
